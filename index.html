@@ -547,18 +547,6 @@
   .footer-policies { display: flex; gap: 20px; flex-wrap: wrap; }
   .footer-policies a { color: rgba(250,246,239,0.3); font-size: 0.75rem; text-decoration: none; transition: color 0.2s; }
   .footer-policies a:hover { color: rgba(250,246,239,0.7); }
-
-  /* Cart toast */
-  .cart-toast {
-    position: fixed; bottom: 30px; right: 30px; z-index: 999;
-    background: var(--eclipse); color: var(--cream); border: 1px solid var(--gold);
-    padding: 14px 24px; font-size: 0.85rem;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-    transform: translateY(80px); opacity: 0;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    pointer-events: none;
-  }
-  .cart-toast.show { transform: translateY(0); opacity: 1; }
   .cart-toast span { color: var(--gold); font-weight: 500; }
 
   /* Responsive */
@@ -602,9 +590,6 @@
     <li><a href="#eclipse">El Eclipse</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
-  <button class="nav-cart" onclick="window.location.href='https://buy.stripe.com/7sYfZj1JwgUTcuK90ugjC00'">
-    Carrito <strong id="cart-count">0</strong>
-  </button>
 </nav>
 
 <!-- HERO — NASA eclipse photo background -->
@@ -1000,11 +985,6 @@
   </div>
 </footer>
 
-<!-- Notificación carrito -->
-<div class="cart-toast" id="cart-toast">
-  <span id="cart-item-name">Artículo</span> añadido al carrito ✓
-</div>
-
 <script>
 
   // Stripe links por modelo
@@ -1056,23 +1036,6 @@
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
-
-  // Carrito
-  let cartCount = 0;
-  function addToCart(name) {
-    cartCount++;
-    document.getElementById('cart-count').textContent = cartCount;
-    document.getElementById('cart-item-name').textContent = name;
-    const t = document.getElementById('cart-toast');
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
-  }
-  function showToast(msg) {
-    document.getElementById('cart-item-name').textContent = msg;
-    const t = document.getElementById('cart-toast');
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
-  }
 
   // FAQ acordeón
   function toggleFaq(el) { el.classList.toggle('open'); }
