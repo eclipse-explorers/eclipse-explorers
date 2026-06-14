@@ -238,6 +238,27 @@
     font-style: italic; max-width: 260px; text-align: right;
   }
 
+  /* MODEL SELECTOR */
+  .model-selector {
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+    margin-bottom: 28px;
+  }
+  .model-selector-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--mid);
+  }
+  .model-btns { display: flex; gap: 8px; }
+  .model-btn {
+    padding: 8px 24px;
+    background: transparent; border: 1px solid var(--ink);
+    font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+    letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500;
+    cursor: pointer; transition: all 0.2s; color: var(--ink);
+  }
+  .model-btn.active { background: var(--ink); color: var(--cream); }
+  .model-btn:hover { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
   /* BUNDLES */
   .bundles {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
@@ -581,7 +602,7 @@
     <li><a href="#eclipse">El Eclipse</a></li>
     <li><a href="#faq">FAQ</a></li>
   </ul>
-  <button class="nav-cart" onclick="showToast('Ver carrito')">
+  <button class="nav-cart" onclick="window.location.href='https://buy.stripe.com/7sYfZj1JwgUTcuK90ugjC00'">
     Carrito <strong id="cart-count">0</strong>
   </button>
 </nav>
@@ -653,28 +674,36 @@
     <p class="section-note">Combina cualquier diseño en tu pack</p>
   </div>
 
+  <div class="model-selector">
+    <p class="model-selector-label">Selecciona tu modelo:</p>
+    <div class="model-btns">
+      <button class="model-btn active" id="btn-eclipse" onclick="selectModel('eclipse')">Modelo Eclipse</button>
+      <button class="model-btn" id="btn-cosmico" onclick="selectModel('cosmico')">Modelo Cósmico</button>
+    </div>
+  </div>
+
   <div class="bundles">
-    <div class="bundle-card" onclick="addToCart('Pack 2 unidades', '€8 total')">
+    <div class="bundle-card" onclick="buyBundle(2)">
       <div class="bundle-size">2</div>
       <div class="bundle-label">Unidades — Ideal para parejas</div>
       <div class="bundle-price-each">€4,50</div>
       <div class="bundle-price-label">por unidad · €9,00 total</div>
-      <button class="bundle-cta">Añadir Pack al Carrito</button>
+      <button class="bundle-cta">Comprar Ahora</button>
     </div>
-    <div class="bundle-card featured" onclick="addToCart('Pack 4 unidades', '€14 total')">
+    <div class="bundle-card featured" onclick="buyBundle(4)">
       <div class="bundle-badge">Popular</div>
       <div class="bundle-size">4</div>
       <div class="bundle-label">Unidades — Ideal para familias</div>
       <div class="bundle-price-each">€4,00</div>
       <div class="bundle-price-label">por unidad · €16,00 total</div>
-      <button class="bundle-cta">Añadir Pack al Carrito</button>
+      <button class="bundle-cta">Comprar Ahora</button>
     </div>
-    <div class="bundle-card" onclick="addToCart('Pack 10 unidades', '€30 total')">
+    <div class="bundle-card" onclick="buyBundle(10)">
       <div class="bundle-size">10</div>
       <div class="bundle-label">Unidades — Ideal para grupos</div>
       <div class="bundle-price-each">€3,50</div>
       <div class="bundle-price-label">por unidad · €35,00 total</div>
-      <button class="bundle-cta">Añadir Pack al Carrito</button>
+      <button class="bundle-cta">Comprar Ahora</button>
     </div>
   </div>
 
@@ -703,7 +732,7 @@
         <div class="product-name">Modelo Eclipse</div>
         <div class="product-sub">Clásico · Lentes negras certificadas ISO 12312-2:2015</div>
         <div class="product-price">€5,00 <span style="color:var(--mid);font-size:0.7rem;">· 1 unidad</span></div>
-        <button class="add-btn" onclick="addToCart('Modelo Eclipse')">Añadir al Carrito</button>
+        <button class="add-btn" onclick="window.location.href='https://buy.stripe.com/7sYfZj1JwgUTcuK90ugjC00'">Comprar Ahora</button>
       </div>
     </div>
 
@@ -721,7 +750,7 @@
         <div class="product-name">Modelo Cósmico</div>
         <div class="product-sub">Diseño atardecer · Lentes negras certificadas ISO 12312-2:2015</div>
         <div class="product-price">€5,00 <span style="color:var(--mid);font-size:0.7rem;">· 1 unidad</span></div>
-        <button class="add-btn" onclick="addToCart('Modelo Cósmico')">Añadir al Carrito</button>
+        <button class="add-btn" onclick="window.location.href='https://buy.stripe.com/8x24gB87UbAz52ifoSgjC04'">Comprar Ahora</button>
       </div>
     </div>
 
@@ -977,6 +1006,34 @@
 </div>
 
 <script>
+
+  // Stripe links por modelo
+  const stripeLinks = {
+    eclipse: {
+      1:  'https://buy.stripe.com/7sYfZj1JwgUTcuK90ugjC00',
+      2:  'https://buy.stripe.com/8x2dRb87U9sr1Q62C6gjC01',
+      4:  'https://buy.stripe.com/eVqcN70Fs6gf8eub8CgjC02',
+      10: 'https://buy.stripe.com/fZu14pbk648766m6SmgjC03',
+    },
+    cosmico: {
+      1:  'https://buy.stripe.com/8x24gB87UbAz52ifoSgjC04',
+      2:  'https://buy.stripe.com/9B600l1JwcED9iya4ygjC05',
+      4:  'https://buy.stripe.com/cNi5kF3RE0VVgL02C6gjC06',
+      10: 'https://buy.stripe.com/3cI5kF2NA7kj0M25OigjC07',
+    }
+  };
+  let selectedModel = 'eclipse';
+
+  function selectModel(model) {
+    selectedModel = model;
+    document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-' + model).classList.add('active');
+  }
+
+  function buyBundle(qty) {
+    window.location.href = stripeLinks[selectedModel][qty];
+  }
+
   // Cuenta atrás al 12 de agosto de 2026
   function updateCountdown() {
     const target = new Date('2026-08-12T10:00:00+02:00');
